@@ -1,5 +1,7 @@
 package com.bank.manager.model;
 
+import com.bank.manager.dto.AgenciaRequestDTO;
+import com.bank.manager.dto.ContaRequestDTO;
 import jakarta.persistence.*;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.cglib.core.Local;
@@ -16,15 +18,28 @@ public abstract class Conta {
     private Long id;
     @Column(unique = true)
     private String numeroConta;
-    private String agencia;
+    @ManyToOne
+    @JoinColumn(name = "agencia_id",referencedColumnName = "id")
+    private Agencia agencia;
     private BigDecimal saldo;
     private LocalDate dataAbertura;
     private boolean statusConta;
+    @ManyToOne
+    @JoinColumn(name = "cliente_id", referencedColumnName = "id")
+    private Cliente cliente;
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
 
     public Conta() {
 
     }
-    public Conta(String numeroConta, String agencia, BigDecimal saldo, LocalDate dataAbertura, boolean statusConta){
+    public Conta(String numeroConta, Agencia agencia, BigDecimal saldo, LocalDate dataAbertura, boolean statusConta){
         this.numeroConta = numeroConta;
         this.agencia = agencia;
         this.saldo = saldo;
@@ -40,11 +55,11 @@ public abstract class Conta {
         this.numeroConta = numeroConta;
     }
 
-    public String getAgencia() {
+    public Agencia getAgencia() {
         return agencia;
     }
 
-    public void setAgencia(String agencia) {
+    public void setAgencia(Agencia agencia) {
         this.agencia = agencia;
     }
 
@@ -70,5 +85,20 @@ public abstract class Conta {
 
     public void setStatusConta(boolean statusConta) {
         this.statusConta = statusConta;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+
+    public void mapperDTO(ContaRequestDTO conta) {   //estudar mapper
+        this.numeroConta = conta.numeroConta();
+        this.agencia = conta.agencia();
+
     }
 }

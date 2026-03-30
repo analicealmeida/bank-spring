@@ -1,5 +1,6 @@
 package com.bank.manager.model;
 
+import com.bank.manager.dto.ClienteRequestDTO;
 import jakarta.persistence.*;
 
 @Entity
@@ -10,7 +11,7 @@ public abstract class Pessoa {
     //Classe abstrata funciona como um aviso para o programador: não use essa classe diretamente, use as filhas
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private Long id;
     private String nome;
     @Column(unique = true)
     private String cpf;
@@ -28,11 +29,11 @@ public abstract class Pessoa {
         this.endereco = endereco;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -67,4 +68,6 @@ public abstract class Pessoa {
     public void setEndereco(String endereco) {
         this.endereco = endereco;
     }
+
+
 }

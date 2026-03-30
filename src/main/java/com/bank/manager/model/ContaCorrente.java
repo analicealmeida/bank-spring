@@ -1,12 +1,14 @@
 package com.bank.manager.model;
 
+import jakarta.persistence.DiscriminatorColumn;
+import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "conta_corrente")
+@DiscriminatorValue("conta_corrente")
 public class ContaCorrente extends Conta{
 
     private BigDecimal chequeEspecial;

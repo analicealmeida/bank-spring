@@ -1,5 +1,7 @@
 package com.bank.manager.model;
 
+import com.bank.manager.dto.AgenciaRequestDTO;
+import com.bank.manager.dto.ClienteRequestDTO;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -45,4 +47,12 @@ public class Cliente extends Pessoa {
     public void setScore(int score) {
         this.score = score;
     }
-}
+
+
+    public void mapperDTO(Cliente cliente){
+        this.setNome(cliente.getNome());
+        this.setCpf(cliente.getCpf());
+    }
+
+    }
+
