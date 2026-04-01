@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController    //TODO VALIDAR DE STATUS
+@RestController
 @RequestMapping("/agencia")
-public class AgenciaController {
+public class AgenciaController { //recebe requisições HTTP, Chama o Service e Retorna Status HTTP.
     @Autowired
     private AgenciaService agenciaService;
     @PostMapping //CRIA DADOS

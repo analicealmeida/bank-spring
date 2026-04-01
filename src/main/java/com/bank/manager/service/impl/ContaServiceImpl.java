@@ -12,13 +12,13 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ContaServiceImpl implements ContaService {
+public class ContaServiceImpl implements ContaService { //regras de negocio. Service conversa com repository.
 
     @Autowired
     private ContaRepository contaRepository;
 
     @Override
-    public void add(Conta conta) { //TODO VALIDAR
+    public void add(Conta conta) {
         if(conta == null){
             throw new RuntimeException("Conta é nula");
         }
@@ -29,7 +29,7 @@ public class ContaServiceImpl implements ContaService {
             throw new RuntimeException("Nome da agência é obrigatória");
         }
 
-        boolean contaExiste = contaRepository.existsByNumeroContaEAgencia(conta.getNumeroConta().trim(),
+        boolean contaExiste = contaRepository.existsByNumeroContaAndAgencia(conta.getNumeroConta().trim(),
         conta.getAgencia());
 
         if(contaExiste){
@@ -40,7 +40,7 @@ public class ContaServiceImpl implements ContaService {
     }
 
     @Override
-    public List<Conta> findAll() { //TODO VALIDAR
+    public List<Conta> findAll() {
         List<Conta> contas = contaRepository.findAll();
 
         if(contas.isEmpty()){
@@ -50,7 +50,7 @@ public class ContaServiceImpl implements ContaService {
     }
 
     @Override
-    public void delete(Long id) { //TODO VALIDAR
+    public void delete(Long id) {
         if(id == null){
             throw new RuntimeException("Id não pode ser nulo");
         }
@@ -66,7 +66,7 @@ public class ContaServiceImpl implements ContaService {
     }
 
     @Override
-    public void update(Long id, Conta conta) { //TODO VALIDAR ***********************************************
+    public void update(Long id, Conta conta) {
         if(id == null) {
             throw new RuntimeException("Conta não existe");
         }
@@ -85,7 +85,7 @@ public class ContaServiceImpl implements ContaService {
     }
 
     @Override
-    public Optional<Conta>getById(Long id) { //TODO VALIDAR
+    public Optional<Conta>getById(Long id) {
         if(id == null){
             throw new RuntimeException("Id não pode ser nulo");
         }

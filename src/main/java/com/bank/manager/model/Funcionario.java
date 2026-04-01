@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 
 @Entity
 @Table(name = "funcionario")
-public class Funcionario extends Pessoa {
+public class Funcionario extends Pessoa { //Entity = Model, aqui criamos as classes que representam as tabelas do banco.
 
     private String matricula;
     private String cargo;
@@ -46,5 +46,11 @@ public class Funcionario extends Pessoa {
 
     public void setSalario(BigDecimal salario) {
         this.salario = salario;
+    }
+
+    public void mapperDTO(Funcionario funcionario) {
+        this.setCpf(funcionario.getCpf());
+        this.setNome(funcionario.getNome());
+        this.setSalario(funcionario.getSalario());
     }
 }

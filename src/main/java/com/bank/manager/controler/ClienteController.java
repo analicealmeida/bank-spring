@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/cliente") //TODO VALIDAR DE STATUS
-public class ClienteController {
+@RequestMapping("/cliente")
+public class ClienteController { //recebe requisições HTTP, Chama o Service e Retorna Status HTTP.
     @Autowired
     private ClienteService clienteService;
 
@@ -29,26 +29,24 @@ public class ClienteController {
         List <Cliente> clientes = clienteService.findAll();
         return ResponseEntity.ok(clientes);
     }
+
     @DeleteMapping("/{id}") //DELETA DADOS
     public ResponseEntity<Long> delete(@PathVariable Long id) {
-        if (clienteService.getById(id).isPresent()) {
-            clienteService.delete(id);
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.notFound().build();
+        clienteService.delete(id);
+        return ResponseEntity.noContent().build();
     }
+
     @PutMapping("/{id}") //ATUALIZA DADOS
-    public ResponseEntity <String> update(@PathVariable Long id, @RequestBody Cliente cliente){
-        if (clienteService.getById(id).isPresent()) {
-            clienteService.update(id, cliente);
-            return ResponseEntity.ok().build();
-        }
-        return ResponseEntity.notFound().build();
+    public ResponseEntity<String> update(@PathVariable Long id, @RequestBody Cliente cliente) {
+
+        clienteService.update(id, cliente);
+        return ResponseEntity.ok().build();
 
     }
+
     @GetMapping("/{id}")
-    public ResponseEntity<Cliente> getById (@PathVariable Long id){
-        return clienteService.getById(id).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+    public Cliente getById(@PathVariable Long id) {
+        return clienteService.getById(id);
     }
-    }
+}
 

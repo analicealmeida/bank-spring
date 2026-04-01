@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 
 @Entity
 @DiscriminatorValue("conta_poupanca")
-public class ContaPoupanca extends Conta{
+public class ContaPoupanca extends Conta{ //Entity = Model, aqui criamos as classes que representam as tabelas do banco.
 
     private BigDecimal taxaRendimento;
 

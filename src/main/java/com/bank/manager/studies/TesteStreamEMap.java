@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TesteStreamEMap {
-
+//estudar STREAM
     public static void main(String[] args) {
 
         Cliente c1 = new Cliente();
@@ -30,6 +30,24 @@ public class TesteStreamEMap {
 
 
 
+
+        //Sem stream:
+
+        List<String> nomesFiltrados = new ArrayList<>();
+
+        for(String nome : nomes){
+            if(nome.startsWith("A")){
+                nomesFiltrados.add(nome);
+            }
+        }
+
+
+        //Com stream:
+
+        List<String> nomesFiltrados1 =
+                nomes.stream()
+                        .filter(nome -> nome.startsWith("A"))
+                        .toList();
 
     }
 }

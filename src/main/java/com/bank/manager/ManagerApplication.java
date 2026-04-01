@@ -16,7 +16,7 @@ import java.util.Optional;
 import java.util.function.Function;
 
 @SpringBootApplication
-public class ManagerApplication {
+public class ManagerApplication { //RUN
 
 	public static void main(String[] args) {
 		SpringApplication.run(ManagerApplication.class, args);

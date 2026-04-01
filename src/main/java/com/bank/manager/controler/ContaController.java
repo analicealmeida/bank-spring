@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/conta")
-public class ContaController {  //TODO VALIDAR DE STATUS
+public class ContaController {  //recebe requisições HTTP, Chama o Service e Retorna Status HTTP.
     @Autowired
     private ContaService contaService;
     @PostMapping //CRIA DADOS

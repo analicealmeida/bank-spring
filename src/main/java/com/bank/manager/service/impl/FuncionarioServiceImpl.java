@@ -13,12 +13,12 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class FuncionarioServiceImpl implements FuncionarioService {
+public class FuncionarioServiceImpl implements FuncionarioService { //regras de negocio. Service conversa com repository.
 
     @Autowired
     private FuncionarioRepository funcionarioRepository;
     @Override
-    public void add(Funcionario funcionario) {  //TODO
+    public void add(Funcionario funcionario) {
 
         if(funcionario == null){
             throw new RuntimeException("Funcionário não pode ser nulo");
@@ -38,7 +38,7 @@ public class FuncionarioServiceImpl implements FuncionarioService {
             throw new RuntimeException("CPF precisa ter 11 digitos inteiros");  //TODO ACEITAR APENAS NUMERO
         }
 
-        boolean cpfExiste = funcionarioRepository.existsByCPF(funcionario.getCpf().trim());
+        boolean cpfExiste = funcionarioRepository.existsByCpf(funcionario.getCpf().trim());
 
         if(cpfExiste){
             throw new RuntimeException("CPF ja existe no banco de dados");
@@ -49,7 +49,7 @@ public class FuncionarioServiceImpl implements FuncionarioService {
     }
 
     @Override
-    public List<Funcionario> findAll() { //TODO VALIDAR
+    public List<Funcionario> findAll() {
         List<Funcionario> funcionarios = funcionarioRepository.findAll();
 
         if(funcionarios.isEmpty()){
@@ -59,7 +59,7 @@ public class FuncionarioServiceImpl implements FuncionarioService {
     }
 
     @Override
-    public void delete(Long id) { //TODO VALIDAR
+    public void delete(Long id) {
         if(id == null){
             throw new RuntimeException("O id não pode ser nulo");
         }
@@ -74,7 +74,7 @@ public class FuncionarioServiceImpl implements FuncionarioService {
     }
 
     @Override
-    public void update(Long id, Funcionario funcionario) { //TODO VALIDAR*************************
+    public void update(Long id, Funcionario funcionario) {
         if(id == null) {
             throw new RuntimeException("Funcionário não existe");
         }

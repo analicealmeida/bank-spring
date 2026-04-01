@@ -11,7 +11,7 @@ import java.time.LocalDate;
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "tipo_conta",discriminatorType = DiscriminatorType.STRING)
-public abstract class Conta {
+public abstract class Conta { //Entity = Model, aqui criamos as classes que representam as tabelas do banco.
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -96,9 +96,9 @@ public abstract class Conta {
     }
 
 
-    public void mapperDTO(ContaRequestDTO conta) {   //estudar mapper
-        this.numeroConta = conta.numeroConta();
-        this.agencia = conta.agencia();
+    public void mapperDTO(Conta conta) {   //estudar mapper
+        this.numeroConta = conta.getNumeroConta();
+        this.agencia = conta.getAgencia();
 
     }
 }

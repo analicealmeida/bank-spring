@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 @Entity
 @Table(name = "cliente")
-public class Cliente extends Pessoa {
+public class Cliente extends Pessoa { //Entity = Model, aqui criamos as classes que representam as tabelas do banco.
 
     private LocalDate dataCadastro;
     private boolean investidor;

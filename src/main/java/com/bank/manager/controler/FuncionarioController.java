@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/funcionario")
-public class FuncionarioController {  //TODO VALIDAR DE STATUS
+public class FuncionarioController {  //recebe requisições HTTP, Chama o Service e Retorna Status HTTP.
     @Autowired
     private FuncionarioService funcionarioService;
     @PostMapping //CRIA DADOS

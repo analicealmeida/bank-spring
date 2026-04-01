@@ -12,5 +12,5 @@ public interface ClienteService {
     public List<Cliente> findAll();
     public void delete(Long id);
     public void update(Long id, Cliente cliente);
-    public Optional<Cliente> getById(Long id);
+    public Cliente getById(Long id);
 }

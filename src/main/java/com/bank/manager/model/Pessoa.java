@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 //@Entity indica que a classe será persistida no banco, e @Inheritance(strategy = JOINED)
 // define que a hierarquia de herança será mapeada em tabelas separadas relacionadas por chave primária.
-public abstract class Pessoa {
+public abstract class Pessoa { //Entity = Model, aqui criamos as classes que representam as tabelas do banco.
     //Classe abstrata funciona como um aviso para o programador: não use essa classe diretamente, use as filhas
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

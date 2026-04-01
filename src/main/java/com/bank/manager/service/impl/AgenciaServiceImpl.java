@@ -11,13 +11,13 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class AgenciaServiceImpl implements AgenciaService {
+public class AgenciaServiceImpl implements AgenciaService { //regras de negocio. Service conversa com repository.
 
     @Autowired
     private AgenciaRepository agenciaRepository;
 
     @Override
-    public void add(Agencia agencia) { //TODO
+    public void add(Agencia agencia) {
         //validando se o objeto(agencia) e os dados dentro desse objetos(nome/estado) estão preenchidos
         if (agencia == null) {
             throw new RuntimeException("Agência não pode ser nula");
@@ -46,7 +46,7 @@ public class AgenciaServiceImpl implements AgenciaService {
                 }
 
     @Override
-    public List<Agencia> findAll() { //TODO VALIDAR
+    public List<Agencia> findAll() {
         //buscar lista, verificar se esta vazia [ ], lancar exceção se estiver
         List<Agencia> lista = agenciaRepository.findAll();
 
@@ -57,7 +57,7 @@ public class AgenciaServiceImpl implements AgenciaService {
     }
 
     @Override
-    public void delete(Long id) { //TODO VALIDAR
+    public void delete(Long id) {
         if(id == null){  //validando id
             throw new RuntimeException("Id não pode ser nulo");
         }
@@ -72,7 +72,7 @@ public class AgenciaServiceImpl implements AgenciaService {
     }
 
     @Override
-    public void update(Long id, AgenciaRequestDTO agencia) { //TODO   VALIDAR SE AGENCIA EXISTE
+    public void update(Long id, AgenciaRequestDTO agencia) {
         if(id == null) { //verificando se agência não é nula
             throw new RuntimeException("Agencia não existe");
         }
@@ -92,7 +92,7 @@ public class AgenciaServiceImpl implements AgenciaService {
     }
 
     @Override
-    public Optional<Agencia> getById(Long id) { //TODO VALIDAR
+    public Optional<Agencia> getById(Long id) {
         if(id == null){ //verificando de id é valido
             throw new RuntimeException("Id não encontrado");
         }

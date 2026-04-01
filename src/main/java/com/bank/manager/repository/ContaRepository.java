@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ContaRepository extends JpaRepository<Conta, Long> {
+public interface ContaRepository extends JpaRepository<Conta, Long> {  //camada que conversa com o banco usando JPA + Hibernate.
 
-    boolean existsByNumeroContaEAgencia(String numeroConta, Agencia agencia);
+    boolean existsByNumeroContaAndAgencia(String numeroConta, Agencia agencia);
 }

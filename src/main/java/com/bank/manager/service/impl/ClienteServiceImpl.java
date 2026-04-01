@@ -1,23 +1,26 @@
 package com.bank.manager.service.impl;
 
+import com.bank.manager.exception.ClienteInexistenteException;
+import com.bank.manager.exception.CpfExistenteException;
 import com.bank.manager.model.Cliente;
 import com.bank.manager.repository.ClienteRepository;
 import com.bank.manager.service.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
 
 @Service
-public class ClienteServiceImpl implements ClienteService {  //TODO VALIDAÇAO
+public class ClienteServiceImpl implements ClienteService {  //regras de negocio. Service conversa com repository.
 
     @Autowired
     private ClienteRepository clienteRepository;
 
     @Override
-    public void add(Cliente cliente) { //TODO VALIDAR
+    public void add(Cliente cliente) {
         if(cliente == null){
             throw new RuntimeException("Cliente não pode ser nulo");
         }
@@ -33,20 +36,22 @@ public class ClienteServiceImpl implements ClienteService {  //TODO VALIDAÇAO
         }
 
         if(cliente.getCpf().trim().length() != 11){
-            throw new RuntimeException("CPF precisa ter 11 digitos inteiros");  //TODO ACEITAR APENAS NUMERO
+            throw new RuntimeException("CPF precisa ter 11 digitos inteiros");  //TODO ACEITAR APENAS NUMERO(converter
             }
 
-        boolean cpfExiste = clienteRepository.existsByCPF(cliente.getCpf().trim());
+        boolean cpfExiste = clienteRepository.existsByCpf(cliente.getCpf().trim());
+
 
         if(cpfExiste){
-            throw new RuntimeException("CPF ja existe no banco de dados");
+            throw new CpfExistenteException("CPF ja existe no banco de dados"); //TODO TRATAR MELHOR O ERRO.
         }
 
+        cliente.setDataCadastro(LocalDate.now());
         clienteRepository.save(cliente);
     }
 
     @Override
-    public List<Cliente> findAll() {  //TODO VALIDAR
+    public List<Cliente> findAll() {
 
         List<Cliente> lista = clienteRepository.findAll();
 
@@ -57,34 +62,24 @@ public class ClienteServiceImpl implements ClienteService {  //TODO VALIDAÇAO
     }
 
     @Override
-    public void delete(Long id) { //TODO VALIDAR
+    public void delete(Long id) {
 
         if(id == null){
             throw new RuntimeException("id não pode ser nulo");
         }
 
-        boolean clienteExiste = clienteRepository.existsById(id);
-
-        if(!clienteExiste){
-            throw new RuntimeException("Cliente não encontrado");
-        }
+        Cliente clienteExiste = this.getById(id);
 
         clienteRepository.deleteById(id);
     }
 
     @Override
-    public void update(Long id, Cliente cliente) { //TODO VALIDAR *****************************************
+    public void update(Long id, Cliente cliente) {
         if(id == null){
             throw new RuntimeException("Id não pode ser nulo");
         }
 
-        boolean clienteExiste = clienteRepository.existsById(id);
-
-        if(!clienteExiste) {
-            throw new RuntimeException("Cliente não encontrado");
-        }
-
-        Cliente clienteExistente = clienteRepository.findById(id).get();
+        Cliente clienteExistente = this.getById(id);
 
         clienteExistente.mapperDTO(cliente);
 
@@ -93,12 +88,12 @@ public class ClienteServiceImpl implements ClienteService {  //TODO VALIDAÇAO
     }
 
     @Override
-    public Optional<Cliente> getById(Long id) { //TODO VALIDAR
+    public Cliente getById(Long id) {  //TRATADO****************
        if(id == null){
            throw new RuntimeException("Id não pode ser nulo");
        }
 
-        return clienteRepository.findById(id);
+        return clienteRepository.findById(id).orElseThrow(()-> new ClienteInexistenteException());
 
     }
 }

@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface FuncionarioRepository extends JpaRepository<Funcionario, Long> {
+public interface FuncionarioRepository extends JpaRepository<Funcionario, Long> { //camada que conversa com o banco usando JPA + Hibernate.
 
-    boolean existsByCPF(String cpf);
+    boolean existsByCpf(String cpf);
 }
