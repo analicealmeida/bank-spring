@@ -1,5 +1,6 @@
 package com.bank.manager.service.impl;
 
+import com.bank.manager.exception.*;
 import com.bank.manager.model.Agencia;
 import com.bank.manager.model.Conta;
 import com.bank.manager.repository.AgenciaRepository;
@@ -20,20 +21,20 @@ public class ContaServiceImpl implements ContaService { //regras de negocio. Ser
     @Override
     public void add(Conta conta) {
         if(conta == null){
-            throw new RuntimeException("Conta é nula");
+            throw new EntidadeNulaException("Conta é nula");
         }
         if(conta.getNumeroConta() == null || conta.getNumeroConta().trim().isEmpty()){
-            throw new RuntimeException("Número da conta é obrigatória");
+            throw new NomeObrigatorioException("Número da conta é obrigatória");
         }
         if(conta.getAgencia() == null){
-            throw new RuntimeException("Nome da agência é obrigatória");
+            throw new NomeObrigatorioException("Nome da agência é obrigatória");
         }
 
         boolean contaExiste = contaRepository.existsByNumeroContaAndAgencia(conta.getNumeroConta().trim(),
         conta.getAgencia());
 
         if(contaExiste){
-            throw new RuntimeException("Conta ja existe no banco de dados");
+            throw new ObjetoExistenteException("Conta ja existe no banco de dados");
         }
 
         contaRepository.save(conta);
@@ -44,7 +45,7 @@ public class ContaServiceImpl implements ContaService { //regras de negocio. Ser
         List<Conta> contas = contaRepository.findAll();
 
         if(contas.isEmpty()){
-            throw new RuntimeException("Contas não cadastradas");
+            throw new ListaEntidadeVaziaException("Contas não cadastradas");
         }
         return contaRepository.findAll();
     }
@@ -52,13 +53,13 @@ public class ContaServiceImpl implements ContaService { //regras de negocio. Ser
     @Override
     public void delete(Long id) {
         if(id == null){
-            throw new RuntimeException("Id não pode ser nulo");
+            throw new IdInvalidoException("Id não pode ser nulo");
         }
 
         boolean existe = contaRepository.existsById(id);
 
         if (!existe) {
-            throw new RuntimeException("Conta não encontrada");
+            throw new ContaInexistenteException("Conta não encontrada");
         }
 
         contaRepository.deleteById(id);
@@ -68,13 +69,13 @@ public class ContaServiceImpl implements ContaService { //regras de negocio. Ser
     @Override
     public void update(Long id, Conta conta) {
         if(id == null) {
-            throw new RuntimeException("Conta não existe");
+            throw new IdInvalidoException("Conta não existe");
         }
 
         boolean contaExiste = contaRepository.existsById(id);
 
         if(!contaExiste) {
-            throw new RuntimeException("Conta não encontrada");
+            throw new ContaInexistenteException("Conta não encontrada");
         }
 
         Conta contaExistente = contaRepository.findById(id).get();
@@ -87,7 +88,7 @@ public class ContaServiceImpl implements ContaService { //regras de negocio. Ser
     @Override
     public Optional<Conta>getById(Long id) {
         if(id == null){
-            throw new RuntimeException("Id não pode ser nulo");
+            throw new IdInvalidoException("Id não pode ser nulo");
         }
 
         return contaRepository.findById(id);

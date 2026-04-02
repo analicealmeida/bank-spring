@@ -1,5 +1,6 @@
 package com.bank.manager.service.impl;
 
+import com.bank.manager.exception.*;
 import com.bank.manager.model.Agencia;
 import com.bank.manager.model.Conta;
 import com.bank.manager.model.Funcionario;
@@ -21,27 +22,27 @@ public class FuncionarioServiceImpl implements FuncionarioService { //regras de 
     public void add(Funcionario funcionario) {
 
         if(funcionario == null){
-            throw new RuntimeException("Funcionário não pode ser nulo");
+            throw new EntidadeNulaException("Funcionário não pode ser nulo");
         }
         if(funcionario.getNome() == null || funcionario.getNome().trim().isEmpty()){
-            throw new RuntimeException("Nome de funcionario é obrigatório");
+            throw new NomeObrigatorioException("Nome de funcionario é obrigatório");
         }
         if(funcionario.getCpf() == null){
-            throw new RuntimeException("Cpf não pode ser nulo");
+            throw new CpfInvalidoException("Cpf não pode ser nulo");
         }
 
         if(funcionario.getCpf().trim().isEmpty()){
-            throw new RuntimeException("CPF não pode ser vazio");
+            throw new CpfInvalidoException("CPF não pode ser vazio");
         }
 
         if(funcionario.getCpf().trim().length() != 11){
-            throw new RuntimeException("CPF precisa ter 11 digitos inteiros");  //TODO ACEITAR APENAS NUMERO
+            throw new CpfInvalidoException("CPF precisa ter 11 digitos inteiros");  //TODO ACEITAR APENAS NUMERO
         }
 
         boolean cpfExiste = funcionarioRepository.existsByCpf(funcionario.getCpf().trim());
 
         if(cpfExiste){
-            throw new RuntimeException("CPF ja existe no banco de dados");
+            throw new CpfExistenteException("CPF ja existe no banco de dados");
         }
 
         funcionarioRepository.save(funcionario);
@@ -53,21 +54,21 @@ public class FuncionarioServiceImpl implements FuncionarioService { //regras de 
         List<Funcionario> funcionarios = funcionarioRepository.findAll();
 
         if(funcionarios.isEmpty()){
-            throw new RuntimeException("Funcionários não cadastrados");
+            throw new ListaEntidadeVaziaException("Funcionários não cadastrados");
         }
-        return funcionarioRepository.findAll();
+        return funcionarios;
     }
 
     @Override
     public void delete(Long id) {
         if(id == null){
-            throw new RuntimeException("O id não pode ser nulo");
+            throw new IdInvalidoException("O id não pode ser nulo");
         }
 
         boolean funcionarioExiste = funcionarioRepository.existsById(id);
 
         if(!funcionarioExiste){
-            throw new RuntimeException("Funcionário não encontrado");
+            throw new FuncionarioInexistenteException("Funcionário não encontrado");
         }
 
         funcionarioRepository.deleteById(id);
@@ -76,13 +77,13 @@ public class FuncionarioServiceImpl implements FuncionarioService { //regras de 
     @Override
     public void update(Long id, Funcionario funcionario) {
         if(id == null) {
-            throw new RuntimeException("Funcionário não existe");
+            throw new EntidadeNulaException("Funcionário não existe");
         }
 
         boolean Existe = funcionarioRepository.existsById(id);
 
         if(!Existe) {
-            throw new RuntimeException("Funcionario não encontrado");
+            throw new FuncionarioInexistenteException("Funcionario não encontrado");
         }
 
         Funcionario funcionarioExistente = funcionarioRepository.findById(id).get();
@@ -95,7 +96,7 @@ public class FuncionarioServiceImpl implements FuncionarioService { //regras de 
     @Override
     public Optional<Funcionario> getById(Long id) {
         if(id == null){
-            throw new RuntimeException("Id não pode ser nulo");
+            throw new IdInvalidoException("Id não pode ser nulo");
         }
 
         return funcionarioRepository.findById(id);

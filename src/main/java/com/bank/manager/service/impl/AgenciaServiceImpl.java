@@ -1,6 +1,7 @@
 package com.bank.manager.service.impl;
 
 import com.bank.manager.dto.AgenciaRequestDTO;
+import com.bank.manager.exception.*;
 import com.bank.manager.model.Agencia;
 import com.bank.manager.repository.AgenciaRepository;
 import com.bank.manager.service.AgenciaService;
@@ -17,18 +18,18 @@ public class AgenciaServiceImpl implements AgenciaService { //regras de negocio.
     private AgenciaRepository agenciaRepository;
 
     @Override
-    public void add(Agencia agencia) {
+    public void add(Agencia agencia) {  //TODO EXCEPTIONS PROPRIOS
         //validando se o objeto(agencia) e os dados dentro desse objetos(nome/estado) estão preenchidos
         if (agencia == null) {
-            throw new RuntimeException("Agência não pode ser nula");
+            throw new EntidadeNulaException("Agência não pode ser nula");
         }
         //se o nome agencia estiver nulo, ou com espaços desnecessários e vazio lance uma exceçao
             if (agencia.getNomeAgencia() == null || agencia.getNomeAgencia().trim().isEmpty()) {
-                throw new RuntimeException("Nome da agência é obrigatório");
+                throw new NomeObrigatorioException("Nome da agência é obrigatório");
             }
                 //se o estado estiver nulo(null) ou com espaços desnecessários(trim) e vazio(empty) lance exceçao
                 if (agencia.getEstado() == null || agencia.getEstado().trim().isEmpty()) {
-                    throw new RuntimeException("Estado é obrigatório");
+                    throw new NomeObrigatorioException("Estado é obrigatório");
                 }
 
                     //validando se ja existe agencia no banco de dados. para nao haver duplicidade.
@@ -40,48 +41,56 @@ public class AgenciaServiceImpl implements AgenciaService { //regras de negocio.
                                     agencia.getEstado().trim()
                             );
                     if (jaExiste) {
-                        throw new RuntimeException("Já existe uma agência com esse nome nesse estado");
+                        throw new ObjetoExistenteException("Já existe uma agência com esse nome nesse estado");
                     }
                     agenciaRepository.save(agencia);
                 }
 
     @Override
-    public List<Agencia> findAll() {
+    public List<Agencia> findAll() { //TODO EXCEPTIONS PROPRIOS
         //buscar lista, verificar se esta vazia [ ], lancar exceção se estiver
         List<Agencia> lista = agenciaRepository.findAll();
 
         if (lista.isEmpty()) {
-            throw new RuntimeException("Nenhuma agência cadastrada");
+            throw new ListaEntidadeVaziaException("Nenhuma agência cadastrada");
         }
         return agenciaRepository.findAll();
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(Long id) { //TODO EXCEPTIONS PROPRIOS
         if(id == null){  //validando id
-            throw new RuntimeException("Id não pode ser nulo");
+            throw new IdInvalidoException("Id não pode ser nulo");
         }
         //verificando se a agencia existe para ser deletada
         boolean existe = agenciaRepository.existsById(id);
 
         if (!existe) {
-            throw new RuntimeException("Agência não encontrada");
+            throw new AgenciaInexistenteException("Agência não encontrada");
         }
 
         agenciaRepository.deleteById(id);
     }
 
     @Override
-    public void update(Long id, AgenciaRequestDTO agencia) {
+    public void update(Long id, AgenciaRequestDTO agencia) { //TODO EXCEPTIONS PROPRIOS
         if(id == null) { //verificando se agência não é nula
-            throw new RuntimeException("Agencia não existe");
+            throw new AgenciaInexistenteException("Agencia não existe");
         }
         //verificando se agencia existe antes de atualizar
         boolean agenciaExiste = agenciaRepository.existsById(id);
 
         if(!agenciaExiste) {
-            throw new RuntimeException("Agencia não encontrada");
+            throw new AgenciaInexistenteException("Agencia não encontrada");
         }
+
+        if(agencia == null){
+            throw new NomeObrigatorioException("Agencia não pode ser nula");
+        }
+        if(agencia.nomeAgencia().trim().isEmpty()){
+            throw new NomeObrigatorioException("Nome da agencia é obrigatório");
+        }
+
 
         Agencia agenciaExistente = agenciaRepository.findById(id).get(); //busque no banco o id solicitado
 
@@ -92,15 +101,15 @@ public class AgenciaServiceImpl implements AgenciaService { //regras de negocio.
     }
 
     @Override
-    public Optional<Agencia> getById(Long id) {
+    public Optional<Agencia> getById(Long id) { //TODO EXCEPTIONS PROPRIOS  rever
         if(id == null){ //verificando de id é valido
-            throw new RuntimeException("Id não encontrado");
+            throw new IdInvalidoException("Id não encontrado");
         }
         //verificando de id existe no banco de dados antes de retornar
         boolean idExistente = agenciaRepository.existsById(id);   //POR SER OPTIONAL FICA REDUNDANTE
 
         if(!idExistente){
-            throw new RuntimeException("Id não encontrado");
+            throw new IdInvalidoException("Id não encontrado");
         }
 
         return agenciaRepository.findById(id);
