@@ -56,4 +56,6 @@ public class Agencia {    //Entity = Model, aqui criamos as classes que represen
         this.estado = agencia.estado();
 
     }
+
+
 }

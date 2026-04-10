@@ -15,6 +15,7 @@ public class ContaPoupanca extends Conta{ //Entity = Model, aqui criamos as clas
     public ContaPoupanca(){
 
     }
+
     public ContaPoupanca(BigDecimal taxaRendimento){
         this.taxaRendimento = taxaRendimento;
     }

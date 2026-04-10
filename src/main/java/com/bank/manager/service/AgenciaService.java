@@ -11,5 +11,5 @@ public interface AgenciaService {
     public List<Agencia> findAll();
     public void delete(Long id);
     public void update(Long id, AgenciaRequestDTO agencia);
-    public Optional<Agencia> getById(Long id);
+    public Agencia getById(Long id);
 }

@@ -1,5 +1,6 @@
 package com.bank.manager.service;
 
+import com.bank.manager.dto.LoginDTO;
 import com.bank.manager.model.Agencia;
 import com.bank.manager.model.Cliente;
 
@@ -13,4 +14,5 @@ public interface ClienteService {
     public void delete(Long id);
     public void update(Long id, Cliente cliente);
     public Cliente getById(Long id);
+    public Cliente login(LoginDTO loginDTO);
 }

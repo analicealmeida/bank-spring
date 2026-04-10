@@ -26,7 +26,7 @@ public class AgenciaController { //recebe requisições HTTP, Chama o Service e 
     }
     @DeleteMapping("/{id}") //DELETA DADOS
     public ResponseEntity<Long> delete(@PathVariable Long id){
-        if(agenciaService.getById(id).isPresent()){
+        if(agenciaService !=null){
             agenciaService.delete(id);
             return ResponseEntity.noContent().build();
         }
@@ -34,7 +34,10 @@ public class AgenciaController { //recebe requisições HTTP, Chama o Service e 
     }
     @PutMapping("/{id}") //ATUALIZA DADOS
     public ResponseEntity <String> update(@PathVariable Long id, @RequestBody AgenciaRequestDTO agencia){
-        if (agenciaService.getById(id).isPresent()) {
+
+
+
+        if (agenciaService != null) {
             agenciaService.update(id, agencia);
             return ResponseEntity.ok().build();
         }
@@ -43,7 +46,13 @@ public class AgenciaController { //recebe requisições HTTP, Chama o Service e 
     }
     @GetMapping("/{id}")
     public ResponseEntity<Agencia> getById (@PathVariable Long id){
-        return agenciaService.getById(id).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build()); //estudar
+        Agencia agencia = agenciaService.getById(id);
+
+        if(agencia != null){
+            return ResponseEntity.ok(agencia);
+        }
+
+        return ResponseEntity.notFound().build();
     }
 
 }

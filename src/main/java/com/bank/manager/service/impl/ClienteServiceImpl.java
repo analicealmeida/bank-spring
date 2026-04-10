@@ -1,5 +1,6 @@
 package com.bank.manager.service.impl;
 
+import com.bank.manager.dto.LoginDTO;
 import com.bank.manager.exception.*;
 import com.bank.manager.model.Cliente;
 import com.bank.manager.repository.ClienteRepository;
@@ -50,6 +51,8 @@ public class ClienteServiceImpl implements ClienteService {  //regras de negocio
         }
 
         cliente.setDataCadastro(LocalDate.now());
+
+
         clienteRepository.save(cliente);
     }
 
@@ -97,5 +100,21 @@ public class ClienteServiceImpl implements ClienteService {  //regras de negocio
 
         return clienteRepository.findById(id).orElseThrow(()-> new ClienteInexistenteException());
 
+    }
+
+    @Override
+    public Cliente login(LoginDTO loginDTO) { //NOVO
+        Cliente cliente = clienteRepository
+                .findByUsername(loginDTO.username())
+                .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
+
+        System.out.println("senha banco: " + cliente.getPasswordCliente());
+        System.out.println("senha digitada: " + loginDTO.password());
+
+        if (!cliente.getPasswordCliente().trim().equals(loginDTO.password().trim())) {
+            throw new RuntimeException("Senha inválida");
+        }
+
+        return cliente;
     }
 }

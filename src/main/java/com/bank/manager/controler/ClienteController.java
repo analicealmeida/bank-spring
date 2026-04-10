@@ -2,6 +2,7 @@ package com.bank.manager.controler;
 
 import com.bank.manager.dto.AgenciaRequestDTO;
 import com.bank.manager.dto.ClienteRequestDTO;
+import com.bank.manager.dto.LoginDTO;
 import com.bank.manager.model.Agencia;
 import com.bank.manager.model.Cliente;
 import com.bank.manager.service.AgenciaService;
@@ -47,6 +48,15 @@ public class ClienteController { //recebe requisições HTTP, Chama o Service e 
     @GetMapping("/{id}")
     public Cliente getById(@PathVariable Long id) {
         return clienteService.getById(id);
+    }
+
+
+    @PostMapping("/login-user")
+    public ResponseEntity<?> login(@RequestBody LoginDTO loginDTO){
+        //Cliente cliente = clienteService.login(loginDTO);
+        //return ResponseEntity.ok(cliente);
+        return ResponseEntity.ok(clienteService.login(loginDTO));
+
     }
 }
 

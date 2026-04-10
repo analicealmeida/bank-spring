@@ -12,15 +12,19 @@ public class Cliente extends Pessoa { //Entity = Model, aqui criamos as classes 
     private LocalDate dataCadastro;
     private boolean investidor;
     private int score;
+    private String passwordCliente;
+    private String username;//NOVO
 
     public Cliente(){
 
     }
 
-    public Cliente(LocalDate dataCadastro, boolean investidor, int score){
+    public Cliente(LocalDate dataCadastro, boolean investidor, int score, String passwordCliente, String username){
         this.dataCadastro = dataCadastro;
         this.investidor = investidor;
         this.score = score;
+        this.passwordCliente = passwordCliente;
+        this.username = username;
     }
     //precisa de um construtor com super?
 
@@ -48,6 +52,21 @@ public class Cliente extends Pessoa { //Entity = Model, aqui criamos as classes 
         this.score = score;
     }
 
+    public String getPasswordCliente() {
+        return passwordCliente;
+    }
+
+    public void setPasswordCliente(String passwordCliente) {
+        this.passwordCliente = passwordCliente;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
     public void mapperDTO(Cliente cliente){
         this.setNome(cliente.getNome());

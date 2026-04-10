@@ -101,7 +101,7 @@ public class AgenciaServiceImpl implements AgenciaService { //regras de negocio.
     }
 
     @Override
-    public Optional<Agencia> getById(Long id) { //TODO EXCEPTIONS PROPRIOS  rever
+    public Agencia getById(Long id) { //TODO EXCEPTIONS PROPRIOS  rever
         if(id == null){ //verificando de id é valido
             throw new IdInvalidoException("Id não encontrado");
         }
@@ -112,6 +112,6 @@ public class AgenciaServiceImpl implements AgenciaService { //regras de negocio.
             throw new IdInvalidoException("Id não encontrado");
         }
 
-        return agenciaRepository.findById(id);
+        return agenciaRepository.findById(id).get();
     }}
 
