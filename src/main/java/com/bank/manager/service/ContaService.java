@@ -13,4 +13,5 @@ public interface ContaService {
     public void delete(Long id);
     public void update(Long id, ContaRequestDTO conta);
     public Optional<Conta> getById(Long id);
+    List<Conta> findByClienteCpf(String cpf);
 }

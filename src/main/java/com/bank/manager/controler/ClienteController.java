@@ -22,6 +22,7 @@ public class ClienteController { //recebe requisições HTTP, Chama o Service e 
 
     @PostMapping //CRIA DADOS
     public ResponseEntity<String> add(@RequestBody Cliente cliente){
+
         clienteService.add(cliente);
         return ResponseEntity.status(201).build();
     }
@@ -57,6 +58,11 @@ public class ClienteController { //recebe requisições HTTP, Chama o Service e 
         //return ResponseEntity.ok(cliente);
         return ResponseEntity.ok(clienteService.login(loginDTO));
 
+    }
+
+    @GetMapping("/getAllNames")
+    public ResponseEntity<List <String>> getAllNames(){
+        return ResponseEntity.ok(clienteService.getAllNames());
     }
 }
 

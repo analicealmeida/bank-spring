@@ -139,6 +139,12 @@ public class ContaServiceImpl implements ContaService { //regras de negocio. Ser
 
     }
 
+    @Override
+    public List<Conta> findByClienteCpf(String cpf) {
+        return contaRepository.findByClienteCpf(cpf);
     }
+
+
+}
 
 

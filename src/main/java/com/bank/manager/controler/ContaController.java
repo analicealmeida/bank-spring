@@ -4,6 +4,7 @@ import com.bank.manager.dto.ContaRequestDTO;
 import com.bank.manager.model.Agencia;
 import com.bank.manager.model.Conta;
 import com.bank.manager.service.AgenciaService;
+import com.bank.manager.service.ClienteService;
 import com.bank.manager.service.ContaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -47,5 +48,10 @@ public class ContaController {  //recebe requisições HTTP, Chama o Service e R
     @GetMapping("/{id}")
     public ResponseEntity<Conta> getById (@PathVariable Long id){
         return contaService.getById(id).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/contasDeCliente/{cpf}")
+    public ResponseEntity<List<Conta>> findByClienteCpf(@PathVariable String cpf){
+        return ResponseEntity.ok(contaService.findByClienteCpf(cpf));
     }
 }

@@ -4,9 +4,14 @@ import com.bank.manager.dto.LoginDTO;
 import com.bank.manager.exception.*;
 import com.bank.manager.model.Cliente;
 import com.bank.manager.repository.ClienteRepository;
+import com.bank.manager.security.JwtUtil;
 import com.bank.manager.service.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import com.bank.manager.security.JwtUtil;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -17,6 +22,15 @@ public class ClienteServiceImpl implements ClienteService {  //regras de negocio
 
     @Autowired
     private ClienteRepository clienteRepository;
+    @Autowired
+    private final JwtUtil jwtUtil;
+    private final PasswordEncoder passwordEncoder;
+
+    public ClienteServiceImpl(JwtUtil jwtUtil, PasswordEncoder passwordEncoder) {
+        this.clienteRepository = clienteRepository;
+        this.jwtUtil = jwtUtil;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Override
     public void add(Cliente cliente) {
@@ -52,6 +66,8 @@ public class ClienteServiceImpl implements ClienteService {  //regras de negocio
 
         cliente.setDataCadastro(LocalDate.now());
 
+        String encryptedPassword = new BCryptPasswordEncoder().encode(cliente.getPasswordCliente());
+        cliente.setPasswordCliente(encryptedPassword);
 
         clienteRepository.save(cliente);
     }
@@ -103,7 +119,7 @@ public class ClienteServiceImpl implements ClienteService {  //regras de negocio
     }
 
     @Override
-    public Cliente login(LoginDTO loginDTO) { //NOVO
+    public String login(LoginDTO loginDTO) { //NOVO
         Cliente cliente = clienteRepository
                 .findByUsername(loginDTO.username())
                 .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
@@ -111,10 +127,18 @@ public class ClienteServiceImpl implements ClienteService {  //regras de negocio
         System.out.println("senha banco: " + cliente.getPasswordCliente());
         System.out.println("senha digitada: " + loginDTO.password());
 
-        if (!cliente.getPasswordCliente().trim().equals(loginDTO.password().trim())) {
+        if (!passwordEncoder.matches(loginDTO.password(), cliente.getPasswordCliente())) {
             throw new RuntimeException("Senha inválida");
         }
 
-        return cliente;
+        //return cliente;
+        return jwtUtil.generateToken(cliente.getUsername());
     }
+
+    @Override
+    public List<String> getAllNames() {
+        return clienteRepository.getAllNames();
+    }
+
+
 }
