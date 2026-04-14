@@ -2,31 +2,35 @@ package com.bank.manager.model;
 
 import com.bank.manager.dto.AgenciaRequestDTO;
 import com.bank.manager.dto.ClienteRequestDTO;
+import com.bank.manager.enums.Role;
 import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
+import java.util.Collection;
+import java.util.List;
+
 @Entity
 @Table(name = "cliente")
-public class Cliente extends Pessoa { //Entity = Model, aqui criamos as classes que representam as tabelas do banco.
+public class Cliente extends Pessoa implements UserDetails { //Entity = Model, aqui criamos as classes que representam as tabelas do banco.
 
     private LocalDate dataCadastro;
     private boolean investidor;
     private int score;
-    private String passwordCliente;
-    private String username;//NOVO
 
     public Cliente(){
 
     }
 
-    public Cliente(LocalDate dataCadastro, boolean investidor, int score, String passwordCliente, String username){
+    public Cliente(Long id, String nome, String cpf, String telefone, String endereco, String username, String password, LocalDate dataCadastro, boolean investidor, int score){
+       super(id, nome, cpf, telefone, endereco, username, password);
         this.dataCadastro = dataCadastro;
         this.investidor = investidor;
         this.score = score;
-        this.passwordCliente = passwordCliente;
-        this.username = username;
+
     }
-    //precisa de um construtor com super?
 
     public LocalDate getDataCadastro() {
         return dataCadastro;
@@ -36,9 +40,9 @@ public class Cliente extends Pessoa { //Entity = Model, aqui criamos as classes 
         this.dataCadastro = dataCadastro;
     }
 
-    public boolean getInvestidor() {
+    public boolean isInvestidor() {
         return investidor;
-    }
+    }  //Para atributos boolean, o padrão correto é: isNomeDoCampo() (mais correto), getNomeDoCampo() (funciona, mas não é o ideal)
 
     public void setInvestidor(boolean investidor) {
         this.investidor = investidor;
@@ -52,20 +56,13 @@ public class Cliente extends Pessoa { //Entity = Model, aqui criamos as classes 
         this.score = score;
     }
 
-    public String getPasswordCliente() {
-        return passwordCliente;
+
+    public Role getRole() {
+        return role;
     }
 
-    public void setPasswordCliente(String passwordCliente) {
-        this.passwordCliente = passwordCliente;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     public void mapperDTO(Cliente cliente){
@@ -73,5 +70,42 @@ public class Cliente extends Pessoa { //Entity = Model, aqui criamos as classes 
         this.setCpf(cliente.getCpf());
     }
 
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(role.name()));
     }
+
+    @Override
+    public String getPassword() {
+        return super.getPassword();
+    }
+
+    @Override
+    public String getUsername() {
+        return super.getUsername();
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return UserDetails.super.isAccountNonExpired();
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return UserDetails.super.isAccountNonLocked();
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return UserDetails.super.isCredentialsNonExpired();
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return UserDetails.super.isEnabled();
+    }
+}
 

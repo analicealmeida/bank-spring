@@ -19,5 +19,7 @@ public interface ClienteRepository extends JpaRepository<Cliente, Long> { //cama
     @Query(value = "SELECT nome FROM cliente",nativeQuery = true)
     List<String> getAllNames();
 
+    Optional<Cliente> findByCpf(String cpf);
+
 
 }

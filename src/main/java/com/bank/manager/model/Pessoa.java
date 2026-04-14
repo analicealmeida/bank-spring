@@ -17,16 +17,20 @@ public abstract class Pessoa { //Entity = Model, aqui criamos as classes que rep
     private String cpf;
     private String telefone;
     private String endereco;
+    private String password;
+    private String username;
 
     public Pessoa(){
 
     }
-    public Pessoa(Long id, String nome, String cpf, String telefone, String endereco){
+    public Pessoa(Long id, String nome, String cpf, String telefone, String endereco, String username, String password){
         this.id = id;
         this.nome = nome;
         this.cpf = cpf;
         this.telefone = telefone;
         this.endereco = endereco;
+        this.username = username;
+        this.password = password;
     }
 
     public Long getId() {
@@ -69,5 +73,19 @@ public abstract class Pessoa { //Entity = Model, aqui criamos as classes que rep
         this.endereco = endereco;
     }
 
+    public String getUsername() {
+        return username;
+    }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }

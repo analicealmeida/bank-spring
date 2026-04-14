@@ -1,12 +1,16 @@
 package com.bank.manager.service.impl;
 
 import com.bank.manager.dto.LoginDTO;
+import com.bank.manager.enums.Role;
 import com.bank.manager.exception.*;
 import com.bank.manager.model.Cliente;
 import com.bank.manager.repository.ClienteRepository;
 import com.bank.manager.security.JwtUtil;
 import com.bank.manager.service.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,18 +19,22 @@ import com.bank.manager.security.JwtUtil;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
-public class ClienteServiceImpl implements ClienteService {  //regras de negocio. Service conversa com repository.
+public class ClienteServiceImpl implements ClienteService, UserDetailsService {  //regras de negocio. Service conversa com repository.
 
     @Autowired
     private ClienteRepository clienteRepository;
     @Autowired
     private final JwtUtil jwtUtil;
+    @Autowired
     private final PasswordEncoder passwordEncoder;
 
-    public ClienteServiceImpl(JwtUtil jwtUtil, PasswordEncoder passwordEncoder) {
+
+
+    public ClienteServiceImpl(JwtUtil jwtUtil, PasswordEncoder passwordEncoder, ClienteRepository clienteRepository) {
         this.clienteRepository = clienteRepository;
         this.jwtUtil = jwtUtil;
         this.passwordEncoder = passwordEncoder;
@@ -66,8 +74,8 @@ public class ClienteServiceImpl implements ClienteService {  //regras de negocio
 
         cliente.setDataCadastro(LocalDate.now());
 
-        String encryptedPassword = new BCryptPasswordEncoder().encode(cliente.getPasswordCliente());
-        cliente.setPasswordCliente(encryptedPassword);
+        cliente.setPassword(passwordEncoder.encode(cliente.getPassword()));
+        cliente.setRole(Role.CLIENTE);
 
         clienteRepository.save(cliente);
     }
@@ -124,10 +132,10 @@ public class ClienteServiceImpl implements ClienteService {  //regras de negocio
                 .findByUsername(loginDTO.username())
                 .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
 
-        System.out.println("senha banco: " + cliente.getPasswordCliente());
+        System.out.println("senha banco: " + cliente.getPassword());
         System.out.println("senha digitada: " + loginDTO.password());
 
-        if (!passwordEncoder.matches(loginDTO.password(), cliente.getPasswordCliente())) {
+        if (!passwordEncoder.matches(loginDTO.password(), cliente.getPassword())) {
             throw new RuntimeException("Senha inválida");
         }
 
@@ -140,5 +148,26 @@ public class ClienteServiceImpl implements ClienteService {  //regras de negocio
         return clienteRepository.getAllNames();
     }
 
+    @Override
+    public Cliente findByCpf(String cpf) {
+        return clienteRepository.findByCpf(cpf).orElseThrow(() -> new CpfInvalidoException("Não existe cliente com este CPF!"));
+    }
 
+    /*@Override
+    public void cadastrarCliente(Cliente cliente) {
+        //cliente.setRole(Role.ROLE_CLIENTE);
+        //clienteRepository.save(cliente);
+        cliente.setPassword(passwordEncoder.encode(cliente.getPassword()));
+        cliente.setRole(Role.ROLE_CLIENTE);
+
+        clienteRepository.save(cliente);
+    }*/
+
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        System.out.println("LOGIN CHAMADO: " + username);
+        return clienteRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
+    }
 }

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/cliente")
@@ -63,6 +64,12 @@ public class ClienteController { //recebe requisições HTTP, Chama o Service e 
     @GetMapping("/getAllNames")
     public ResponseEntity<List <String>> getAllNames(){
         return ResponseEntity.ok(clienteService.getAllNames());
+    }
+
+    @GetMapping("/getByCpf/{cpf}")
+    public Cliente findByCpf(@PathVariable String cpf){
+        return clienteService.findByCpf(cpf);
+
     }
 }
 
