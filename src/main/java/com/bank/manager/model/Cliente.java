@@ -71,11 +71,13 @@ public class Cliente extends Pessoa implements UserDetails { //Entity = Model, a
     }
 
     @Enumerated(EnumType.STRING)
-    private Role role;
+    @Column(columnDefinition = "VARCHAR(255) DEFAULT 'CLIENTE'")
+    private Role role = Role.CLIENTE;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.name()));
+        Role r = role != null ? role : Role.CLIENTE;
+        return List.of(new SimpleGrantedAuthority(r.name()));
     }
 
     @Override
