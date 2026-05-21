@@ -8,7 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.List;
 import java.util.Optional;
 
-public interface ClienteService {
+public interface ClienteService { //nao precisa colocar public na interface
 
     public void add(Cliente cliente);
     public List<Cliente> findAll();
@@ -20,4 +20,7 @@ public interface ClienteService {
     public Cliente findByCpf(String cpf);
     //public void cadastrarCliente(Cliente cliente);
     public UserDetails loadUserByUsername(String username);
+    public boolean existePorUsername(String username);
+    public Cliente getUser();
+
 }

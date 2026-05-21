@@ -22,4 +22,5 @@ public interface ClienteRepository extends JpaRepository<Cliente, Long> { //cama
     Optional<Cliente> findByCpf(String cpf);
 
 
+    boolean existsByUsername(String username);
 }

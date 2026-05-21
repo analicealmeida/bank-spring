@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.UUID;
 
 @Component
 public class JwtUtil {
@@ -19,7 +20,8 @@ public class JwtUtil {
 
         return Jwts.builder()
                 .setSubject(username)
-                .setIssuedAt(new Date())
+                .setIssuedAt(new Date()) //definindo token diferente a cada login
+                .setId(UUID.randomUUID().toString()) //garante ser unico
 
                 .setExpiration(
                         new Date(

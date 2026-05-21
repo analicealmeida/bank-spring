@@ -8,6 +8,7 @@ import com.bank.manager.repository.ClienteRepository;
 import com.bank.manager.security.JwtUtil;
 import com.bank.manager.service.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -20,6 +21,8 @@ import com.bank.manager.security.JwtUtil;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+
+import static com.bank.manager.enums.Role.CLIENTE;
 
 
 @Service
@@ -75,7 +78,7 @@ public class ClienteServiceImpl implements ClienteService, UserDetailsService { 
         cliente.setDataCadastro(LocalDate.now());
 
         cliente.setPassword(passwordEncoder.encode(cliente.getPassword()));
-        cliente.setRole(Role.CLIENTE);
+        cliente.setRole(CLIENTE); //tirei role.
 
         clienteRepository.save(cliente);
     }
@@ -116,15 +119,28 @@ public class ClienteServiceImpl implements ClienteService, UserDetailsService { 
 
     }
 
+
     @Override
     public Cliente getById(Long id) {
-       if(id == null){
-           throw new IdInvalidoException("Id não pode ser nulo");
-       }
+        if (id == null) {
+            throw new IdInvalidoException("Id não pode ser nulo");
 
-        return clienteRepository.findById(id).orElseThrow(()-> new ClienteInexistenteException());
+        }
+        Cliente c = getUser();
 
+        return clienteRepository.findById(id).orElseThrow(() -> new ClienteInexistenteException());
     }
+
+    @Override
+    public Cliente getUser() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails) {
+            return (Cliente) ((UserDetails) principal);
+        } else {
+            return null;
+        }
+    }
+
 
     @Override
     public String login(LoginDTO loginDTO) { //NOVO
@@ -169,5 +185,10 @@ public class ClienteServiceImpl implements ClienteService, UserDetailsService { 
         System.out.println("LOGIN CHAMADO: " + username);
         return clienteRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
+    }
+
+    @Override
+    public boolean existePorUsername(String username) {
+        return clienteRepository.existsByUsername(username);
     }
 }

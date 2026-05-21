@@ -15,8 +15,10 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
+import static org.aspectj.weaver.tools.cache.SimpleCacheFactory.path;
+
 @Component
-public class JwtFilter extends OncePerRequestFilter {
+public class JwtFilter extends OncePerRequestFilter { //valida token
 
     private final JwtUtil jwtUtil;
     private final UserDetailsService userDetailsService;
@@ -35,7 +37,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
         String path = request.getServletPath();
 
-        if (path.equals("/cliente/login-user")) {
+        if (path.equals("/cliente/login-user") || path.equals("/funcionario/login-user")){ //MODIFIQUEI PARA POR FUNCIONARIO******************
             filterChain.doFilter(request, response);
             return;
         }

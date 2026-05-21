@@ -99,6 +99,14 @@ public class GlobalExceptionHandler {
          body.put("error", e.getMessage());
          return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body);
      }
+
+     //illegal
+     @ExceptionHandler(IllegalArgumentException.class)
+     public ResponseEntity<Map<String,Object>> handleIllegalArgumentException(IllegalArgumentException e) {
+         Map<String, Object> body = new HashMap<>();
+         body.put("error", e.getMessage());
+         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
+}
 }
 
 
